@@ -1,0 +1,76 @@
+﻿@using System.Diagnostics.Eventing.Reader
+@model AdminDashboard.Models.Offers
+
+@{
+        Layout = "~/Views/Shared/_Layout.cshtml";
+        ViewBag.Title = "Offers";
+    }
+
+
+
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <title>Bootstrap Example</title>
+      
+    </head>
+    <body>
+    <form method="post">
+    <section class="dashboard-counts no-padding-bottom">
+        <div class="container-fluid">
+            <div class="row bg-white has-shadow">
+                <!--Radio group-->
+                <div class="form-group radio-pink-gap ">
+                    <input name="group103" type="radio" class="with-gap" id="radio109" title="Brand" value="Brand" flag="Brand" checked>
+                    <label name="Brand" for="radio109">Brand</label>
+                </div>
+
+                <div class="form-group radio-pink-gap">
+                    <input name="group103" type="radio" class="with-gap" id="radio110" value="Category" flag="Category">
+                    <label  name="Category" for="radio110">Category</label>
+                </div>
+
+                <div class="form-group radio-pink-gap">
+                    <input name="group103" type="radio" class="with-gap" id="radio111" value="SubCategory" flag="SubCatgory">
+                    <label name="SubCategory" for="radio111">SubCategory</label>
+                </div>
+
+                <div class="form-group radio-pink-gap">
+                    <input name="group103" type="radio" class="with-gap" id="radio112" value="Product" flag="Product">
+                    <label name="Product" for="radio112">Product</label>
+                    
+                </div>
+                <!--Radio group-->
+            </div>
+        </div>
+    </section>
+    </form>
+    
+    @using (Html.BeginForm())
+    {
+        @Html.RadioButtonFor(b => b.Offer_Name, "Brand")@Html.Label("Brand")
+        @Html.RadioButtonFor(b => b.Offer_Name, "Category")@Html.Label("Category")
+        @Html.RadioButtonFor(b => b.Offer_Name, "SubCategory")@Html.Label("SubCategory")
+        @Html.RadioButtonFor(b => b.Offer_Name, "Product")@Html.Label("Product")
+        
+        <br />
+        <input type="submit" value="Submit" /><br />
+        if (!string.IsNullOrEmpty(Model.Offer_Name))
+        {
+            @Html.Label("Your selected option: " + Model.Offer_Name);
+        }
+    }
+
+
+    
+    
+
+    <div class="card-body text-center">
+        
+            @Html.ActionLink(" Add Offer", "@Html.Label", new { @class = "fa fa-plus btn btn-outline-info" })
+        
+    </div>
+    </body>
+    </html>
+@*, new {IUDFlag = "N", PID = "0"}*@

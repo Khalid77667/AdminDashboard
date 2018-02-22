@@ -1,0 +1,36 @@
+﻿@model AdminDashboard.Models.Vendor
+    @using AdminDashboard.Models
+
+@{
+    ViewBag.Title = "submit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>submit</h2>
+
+<div>
+    @*@using (Html.BeginForm("success", "Home", FormMethod.Post))
+    {
+        <i>Vendor Name</i>@Html.TextBoxFor(x => x.Vendor_Name)
+        @Html.ValidationMessageFor(y => y.Vendor_Name)<br />
+
+                        <i>Created By</i>@Html.TextBoxFor(x => x.VcreationDt)
+                        @Html.ValidationMessageFor(y => y.VcreationDt)<br />
+
+                        <i>Creation Date</i>@Html.TextBoxFor(x => x.VcreatedBy)
+                        @Html.ValidationMessageFor(y => y.VcreatedBy)<br />
+                        <input type="submit" name="submit" value="submit" />
+    }*@
+
+    <form action="success" method="post">
+
+        Vendor_Name<input type="text" name="Vendor_Name" required /><br/>
+
+        VcreationDt<input type="text" name="VcreationDt" required /><br />
+
+        VcreatedBy<input type="text" name="VcreatedBy" required /><br />
+
+            <input type="submit" name="Submit" value="SUBMIT" />
+    </form>
+    
+</div>

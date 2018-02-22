@@ -1,0 +1,412 @@
+﻿@model AdminDashboard.Models.Product
+
+@{
+    ViewBag.Title = "ProductDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>ProductDetail</h2>
+
+<section class="dashboard-counts no-padding-bottom">
+    <div class="container-fluid">
+        <div class=" bg-white has-shadow">
+            <div class="row">
+
+                <div class="col-sm-2">
+                    <p>Vendor</p>
+                </div>
+                <div class="col-sm-6 text-left">
+                    @Html.DropDownList("VID", new SelectList(ViewBag.Vendor, "VID", "Vendor_Name", Model.VID))
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2">
+                    @Html.HiddenFor(model => model.PID, htmlAttributes: new { @class = "control-label col-md-2" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2">
+                    <p>Brand</p>
+                </div>
+                <div class="col-sm-6 text-left">
+                    <select id="BID"></select>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-sm-2">
+                    <p>Category</p>
+                </div>
+                <div class="col-sm-6 text-left">
+                    <select id="CID"></select>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-sm-2">
+                    <p>Sub-Category</p>
+                </div>
+                <div class="col-sm-6 text-left">
+                    <select id="SCID"></select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-2">
+                    Product Name:
+                </div>
+                <div class="col-sm-6 text-left">
+                    @Html.EditorFor(model => model.Product_Name, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Product_Name, "", new { @class = "text-danger" })
+
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-2">
+                    Product Description:
+                </div>
+                <div class="col-sm-6 text-left">
+                    @Html.EditorFor(model => model.Product_Dec, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Product_Dec, "", new { @class = "text-danger" })
+
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-2">
+                    Product Size:
+                </div>
+                <div class="col-sm-6 text-left">
+                    @Html.EditorFor(model => model.Psize, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Psize, "", new { @class = "text-danger" })
+
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-2">
+                    Product Price:
+                </div>
+                <div class="col-sm-6 text-left">
+                    @Html.EditorFor(model => model.Product_Price, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Product_Price, "", new { @class = "text-danger" })
+
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-2">
+                    Upload Product Image:
+
+                </div>
+                <div class="col-sm-4 text-left">
+                    <input type="file" name="imgfile" id="imgfile" style="width: 100%;" />
+                </div>
+                <div class="col-sm-6 text-left">
+                    <input type="button" value="Upload" id="btnimg" class="btn btn-primary" />
+                </div>
+                <div>
+                    <img src="@Model.ImgUrl" alt="@Model.ImgUrl" id="Imgurl" name="Imgurl" height="30px" width="50px" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-2">
+                    Upload Product Icon:
+                </div>
+                <div class="col-sm-4 text-left">
+                    <input type="file" name="iconfile" id="iconfile" style="width: 100%;" />
+                </div>
+                <div class="col-sm-6 text-left">
+                    <input type="button" value="Upload" id="btnicon" class="btn btn-primary" />
+                </div>
+                <div>
+                    <img src="@Model.IconUrl" alt="@Model.IconUrl" id="Iconurl" name="Iconurl" height="30px" width="50px" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2">
+                    Upload Product Square Img:
+                </div>
+                <div class="col-sm-4 text-left">
+                    <input type="file" name="sqrimgfile" id="sqrimgfile" style="width: 100%;" />
+                </div>
+                <div class="col-sm-6 text-left">
+                    <input type="button" value="Upload" id="btnsqr" class="btn btn-primary" />
+                </div>
+                <div>
+                    <img src="@Model.SquareUrl" alt="@Model.SquareUrl" id="SquareUrl" name="SquareUrl" height="30px" width="50px" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-offset-2 col-md-10 text-right">
+                    <input type="submit" id="btnsave" value="@ViewBag.Action" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+        <div>
+            @Html.ActionLink("Back to List", "Product")
+        </div>
+
+    </div>
+</section>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+
+
+            function fillBID() {
+                var VID = $('#VID').val();
+                $.ajax({
+                    url: 'GetBrandByVendor',
+                    type: "GET",
+                    contentType: 'application/json', // Not to set any content header
+
+                    data: { "VID": VID },
+                    success: function (response) {
+                        if (response.length > 0) {
+                            $('#BID').html('');
+                            var options = '';
+                            for (var i = 0; i < response.length; i++) {
+                                if (@Model.BID>0 && @Model.BID==response[i].BID) {
+
+                                    options += '<option value="' + response[i].BID + '" selected>' + response[i].Brand_Name + '</option>';
+                                }
+                                else {
+                                    options += '<option value="' + response[i].BID + '">' + response[i].Brand_Name + '</option>';
+                                }
+                            }
+                            $('#BID').append(options);
+                            fillCID();
+                        }
+                    }
+                });
+            }
+
+            function fillCID() {
+                var BID = $('#BID').val();
+                $.ajax({
+                    url: 'GetCatByBrand',
+                    type: "GET",
+                    contentType: 'application/json', // Not to set any content header
+
+                    data: { "BID": BID },
+                    success: function (response) {
+                        if (response.length > 0) {
+                            $('#CID').html('');
+                            var options = '';
+
+                            for (var i = 0; i < response.length; i++) {
+                                if (@Model.CID>0 && @Model.CID==response[i].CID) {
+
+                                    options += '<option value="' + response[i].CID + '" selected>' + response[i].Category_Name + '</option>';
+                                }
+                                else {
+                                    options += '<option value="' + response[i].CID + '">' + response[i].Category_Name + '</option>';
+                                }
+                            }
+                            $('#CID').append(options);
+                            fillSCID();
+                        }
+                    }
+                });
+            }
+
+            function fillSCID() {
+                var CID = $('#CID').val();
+                $.ajax({
+                    url: 'GetSubCatByCat',
+                    type: "GET",
+                    contentType: 'application/json', // Not to set any content header
+
+                    data: { "CID": CID },
+                    success: function (response) {
+                        if (response.length > 0) {
+                            $('#SCID').html('');
+                            var options = '';
+
+                            for (var i = 0; i < response.length; i++) {
+                                if (@Model.SCID>0 && @Model.SCID==response[i].SCID) {
+
+                                    options += '<option value="' + response[i].SCID + '" selected>' + response[i].SubCategory_Name + '</option>';
+                                }
+                                else {
+                                    options += '<option value="' + response[i].SCID + '">' + response[i].SubCategory_Name + '</option>';
+                                }
+                            }
+                            $('#SCID').append(options);
+
+                        }
+                    }
+                });
+            }
+
+
+
+
+            $("#VID").change(function () {
+                fillBID();
+            });
+
+            $("#BID").change(function () {
+                fillCID();
+            });
+
+            $("#CID").change(function () {
+                fillSCID();
+            });
+
+            fillBID();
+
+            //fillSCID();
+            $('#btnimg').click(function() {
+
+                // Checking whether FormData is available in browser
+                if (window.FormData !== undefined) {
+
+                    var fileUpload = $("#imgfile").get(0);
+                    var files = fileUpload.files;
+
+                    // Create FormData object
+                    var fileData = new FormData();
+
+                    // Looping over all files and add it to FormData object
+                    for (var i = 0; i < files.length; i++) {
+                        fileData.append(files[i].name, files[i]);
+                    }
+                    var brandname = document.getElementById("Product_Name").value;
+                    alert(brandname);
+                    // Adding one more key to FormData object
+                    fileData.append('brandname','Pro_'+ brandname);
+
+                    $.ajax({
+                        url: '/Home/UploadImage',
+                        type: "POST",
+                        contentType: false, // Not to set any content header
+                        processData: false, // Not to process data
+                        data: fileData,
+                        success: function (result) {
+                            if (result.isSuccess) {
+                                alert("Successfully submitted ajax!");
+                            } else {
+                                alert(result.errorMsg);
+                            }
+                            $("#Imgurl").attr('src', '/Images/Pro_' + brandname + '_Img.png');
+                            //alert(result);
+                        }
+                    });
+                } else {
+                    alert("FormData is not supported.");
+                }
+            });
+            $('#btnicon').click(function () {
+
+                // Checking whether FormData is available in browser
+                if (window.FormData !== undefined) {
+
+                    var fileUpload = $("#iconfile").get(0);
+                    var files = fileUpload.files;
+
+                    // Create FormData object
+                    var fileData = new FormData();
+
+                    // Looping over all files and add it to FormData object
+                    for (var i = 0; i < files.length; i++) {
+                        fileData.append(files[i].name, files[i]);
+                    }
+                    var brandname = document.getElementById("Product_Name").value;
+                    alert(brandname);
+                    // Adding one more key to FormData object
+                    fileData.append('brandname','Pro_'+ brandname);
+
+                    $.ajax({
+                        url: '/Home/UploadIcon',
+                        type: "POST",
+                        contentType: false, // Not to set any content header
+                        processData: false, // Not to process data
+                        data: fileData,
+                        success: function (result) {
+                            if (result.isSuccess) {
+                                alert("Successfully submitted ajax!");
+                            } else {
+                                alert(result.errorMsg);
+                            }
+                            $("#Iconurl").attr('src', '/Icon/Pro_' + brandname + '_Icon.png');
+
+                        }
+                    });
+                } else {
+                    alert("FormData is not supported.");
+                }
+            });
+            $('#btnsqr').click(function () {
+
+                // Checking whether FormData is available in browser
+                if (window.FormData !== undefined) {
+
+                    var fileUpload = $("#sqrimgfile").get(0);
+                    var files = fileUpload.files;
+
+                    // Create FormData object
+                    var fileData = new FormData();
+
+                    // Looping over all files and add it to FormData object
+                    for (var i = 0; i < files.length; i++) {
+                        fileData.append(files[i].name, files[i]);
+                    }
+                    var brandname = document.getElementById("Product_Name").value;
+                    //alert(brandname);
+                    // Adding one more key to FormData object
+                    fileData.append('brandname', 'ProSqr_' + brandname);
+
+                    $.ajax({
+                        url: '/Home/UploadImage',
+                        type: "POST",
+                        contentType: false, // Not to set any content header
+                        processData: false, // Not to process data
+                        data: fileData,
+                        success: function (result) {
+                            if (result.isSuccess) {
+                                alert("Successfully submitted ajax!");
+                            } else {
+                                alert(result.errorMsg);
+                            }
+                            $("#SquareUrl").attr('src', '/Images/ProSqr_' + brandname + '_Img.png');
+                            //alert(result);
+                        }
+                    });
+                } else {
+                    alert("FormData is not supported.");
+                }
+            });
+
+            $('#btnsave').click(function() {
+               // alert("hi");
+                var p = {
+                    PID: $('#PID').val(),
+                    VID: $('#VID').val(),
+                    BID: $('#BID').val(),
+                    CID: $('#CID').val(),
+                    SCID: $('#SCID').val(),
+                    Product_Name: document.getElementById("Product_Name").value,
+                    Psize: $('#Psize').val(),
+                    Product_Dec: $('#Product_Dec').val(),
+                    Product_Price: $('#Product_Price').val(),
+                    ImgUrl: $('#Imgurl').attr('src'),
+                    IconUrl: $('#Iconurl').attr('src'),
+                    SquareUrl: $('#SquareUrl').attr('src')
+                };
+
+                console.log(p);
+                $.post("/Home/Product", { p: p, IUDFlag:'@ViewBag.Flag'}, function (data) {
+
+                });
+
+
+            });
+        });
+    </script>
+
+}

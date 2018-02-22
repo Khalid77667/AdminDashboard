@@ -1,0 +1,67 @@
+﻿@model IEnumerable<AdminDashboard.Models.Product>
+@using AdminDashboard.Models
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Product";
+}
+<head>
+    <style type="text/css">
+        #gridContent th {
+            text-align: center;
+            padding: auto;
+        }
+
+        #gridContent tr {
+            padding: auto;
+        }
+    </style>
+</head>
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">PRODUCTS</h2>
+    </div>
+</header>
+<!-- Dashboard Counts Section-->
+<section class="dashboard-counts no-padding-bottom">
+    <div class="container-fluid">
+        <div class="row bg-white has-shadow">
+
+            @{
+                var grid = new WebGrid(Model, canPage: true, rowsPerPage: 10,
+                selectionFieldName: "selectedRow", ajaxUpdateContainerId: "gridContent");
+                grid.Pager(WebGridPagerModes.All);
+            }
+
+
+            <div id="gridContent" style=" padding:0px; ">
+                    @grid.GetHtml(
+                    tableStyle: "table table-responsive table-bordered",
+                    headerStyle: "webgrid-header",
+                    footerStyle: "webgrid-footer",
+                    alternatingRowStyle: "webgrid-alternating-row",
+                    selectedRowStyle: "webgrid-selected-row",
+                    rowStyle: "webgrid-row-style",
+                    mode: WebGridPagerModes.All,
+                    columns: grid.Columns(
+                        grid.Column("PID", format: @<text>  <span class="display-mode">@item.PID </span> </text>, style: "col1Width"),
+                        grid.Column("Product Name", "Product Name", format: @<text>  <span class="display-mode"> <label id="lblName">@item.Product_Name</label> </span> </text>, style: "col2Width"),
+                        grid.Column("Action", format: @<text>
+                                                          @Html.ActionLink(" Edit", "ProductDetail", new {IUDFlag="U",PID= @item.PID }, new { @class = "fa fa-edit btn btn-outline-success" })
+                                                  
+                                                          @Html.ActionLink(" Delete", "ProductDetail", new { IUDFlag = "D", PID = @item.PID }, new { @class = "fa fa-trash btn btn-outline-danger" })
+
+                                                       </text>, style: "col3Width", canSort: false)
+
+                        ))
+            </div>
+            <div class="card-body text-center">
+
+                @Html.ActionLink(" Add Product", "ProductDetail", new { IUDFlag = "N", PID = "0" }, new { @class = "fa fa-plus btn btn-outline-info" })
+
+            </div>
+        </div>
+    </div>
+    
+
+</section>

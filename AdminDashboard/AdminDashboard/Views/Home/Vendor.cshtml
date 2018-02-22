@@ -1,0 +1,86 @@
+﻿@model IEnumerable<AdminDashboard.Models.Vendor>
+@using AdminDashboard.Models
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Vendor";
+}
+<head>
+    <style type="text/css">
+        #gridContent th {
+            text-align: left;
+            padding: auto;
+        }
+
+        #gridContent tr {
+            padding: auto;
+        }
+    </style>
+</head>
+<header class="page-header">
+    <div class="container-fluid">
+
+        <h2 class="no-margin-bottom">VENDORS</h2>
+    </div>
+</header>
+<!-- Dashboard Counts Section-->
+<section class="dashboard-counts no-padding-bottom">
+    <div class="container-fluid">
+        <div class="row bg-white has-shadow">
+            @* ******* *@
+            @*<div class="card-header d-flex align-items-center">
+                    <h3 class="h4">Modal Form</h3>
+                </div>*@
+            @{
+                var grid = new WebGrid(Model, canPage: true, rowsPerPage: 10,
+                selectionFieldName: "selectedRow", ajaxUpdateContainerId: "gridContent");
+                grid.Pager(WebGridPagerModes.All);
+            }
+
+
+
+            <div id="gridContent" style=" padding:0px; ">
+                @grid.GetHtml(
+ tableStyle: "table table-responsive table-bordered",
+ headerStyle: "webgrid-header",
+ footerStyle: "webgrid-footer",
+ alternatingRowStyle: "webgrid-alternating-row",
+ selectedRowStyle: "webgrid-selected-row",
+ rowStyle: "webgrid-row-style",
+ mode: WebGridPagerModes.All,
+ columns:
+     grid.Columns(
+      grid.Column("VID", format: @<text>  <span class="display-mode">@item.VID </span>  </text>, style: "col1Width"),
+grid.Column("Vendor Name", "Vendor Name", format: @<text>  <span class="display-mode"> <label id="lblName">@item.Vendor_Name</label> </span> </text>, style: "col2Width"),
+grid.Column("Vendor Description", "Vendor Description", format: @<text>  <span class="display-mode"> <label id="lblDes">@item.Vendor_Des</label> </span> </text>, style: "col3Width"),
+
+grid.Column("Action", format: @<text>
+                @Html.ActionLink(" Edit", "VendorDetail", new { IUDFlag = "U", VID = @item.VID }, new { @class = "fa fa-edit btn btn-outline-success" })
+
+                @Html.ActionLink(" Delete", "VendorDetail", new { IUDFlag = "D", VID = @item.VID }, new { @class = "fa fa-trash btn btn-outline-danger" })
+
+            </text>, style: "col3Width", canSort: false)
+))
+
+
+            </div>
+
+            <div class="card-body text-center">
+
+
+                @Html.ActionLink(" Add Vendor", "VendorDetail", new { IUDFlag = "N", VID = "0" }, new { @class = "fa fa-plus btn btn-outline-info" })
+
+
+            </div>
+        </div>
+
+    </div>
+
+    @* ******* *@
+
+
+</section>
+
+
+
+

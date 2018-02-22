@@ -1,0 +1,204 @@
+﻿@model AdminDashboard.Models.Brand
+
+@{
+    ViewBag.Title = "BrandDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<header class="page-header">
+    <div class="container-fluid">
+
+        <h2 class="no-margin-bottom">BRANDS</h2>
+    </div>
+</header>
+
+
+
+<section class="dashboard-counts no-padding-bottom">
+    <div class="container-fluid">
+        <div class=" bg-white has-shadow">
+            <div class="row">
+
+                <div class="col-sm-2">
+                    <p>Vendor</p>
+                </div>
+                <div class="col-sm-6 text-left">
+                    @Html.DropDownList("VID", new SelectList(ViewBag.Vendor, "VID", "Vendor_Name", Model.VID))
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2">
+                    @Html.HiddenFor(model => model.BID, htmlAttributes: new { @class = "control-label col-md-2" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-2">
+                    Brand Name:
+                </div>
+                <div class="col-sm-6 text-left">
+                    @Html.EditorFor(model => model.Brand_Name, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Brand_Name, "", new { @class = "text-danger" })
+
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-2">
+                    Brand Description:
+                </div>
+                <div class="col-sm-6 text-left">
+                    @Html.EditorFor(model => model.Brand_Des, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Brand_Des, "", new { @class = "text-danger" })
+
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-sm-2">
+                    Upload BrandImage:
+
+                </div>
+                <div class="col-sm-4 text-left">
+                    <input type="file" name="imgfile" id="imgfile" style="width: 100%;" />
+                </div>
+                <div class="col-sm-6 text-left">
+                    <input type="button" value="Upload" id="btnimg" class="btn btn-primary" />
+                </div>
+                <div>
+                    <img src="@Model.Imgurl" alt="@Model.Imgurl" id="Imgurl" name="Imgurl" height="30px" width="50px" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-2">
+                    Upload IconImage:
+                </div>
+                <div class="col-sm-4 text-left">
+                    <input type="file" name="iconfile" id="iconfile" style="width: 100%;" />
+                </div>
+                <div class="col-sm-6 text-left">
+                    <input type="button" value="Upload" id="btnicon" class="btn btn-primary" />
+                </div>
+                <div>
+                    <img src="@Model.Iconurl" alt="@Model.Iconurl" id="Iconurl" name="Iconurl" height="30px" width="50px" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-offset-2 col-md-10 text-right">
+                    <input type="submit" id="btnsave" value="@ViewBag.Action" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+        <div>
+            @Html.ActionLink("Back to List", "Brand")
+        </div>
+
+    </div>
+</section>
+
+@section scripts {
+    <script>
+        $(document).ready(function() {
+            $('#btnimg').click(function() {
+
+                // Checking whether FormData is available in browser
+                if (window.FormData !== undefined) {
+
+                    var fileUpload = $("#imgfile").get(0);
+                    var files = fileUpload.files;
+
+                    // Create FormData object
+                    var fileData = new FormData();
+
+                    // Looping over all files and add it to FormData object
+                    for (var i = 0; i < files.length; i++) {
+                        fileData.append(files[i].name, files[i]);
+                    }
+                    var brandname = document.getElementById("Brand_Name").value;
+                    alert(brandname);
+                    // Adding one more key to FormData object
+                    fileData.append('brandname', brandname);
+
+                    $.ajax({
+                        url: '/Home/UploadImage',
+                        type: "POST",
+                        contentType: false, // Not to set any content header
+                        processData: false, // Not to process data
+                        data: fileData,
+                        success: function (result) {
+                            if (result.isSuccess) {
+                                alert("Successfully submitted ajax!");
+                            } else {
+                                alert(result.errorMsg);
+                            }
+                            $("#Imgurl").attr('src', '/Images/' + brandname + '_Img.png');
+                            //alert(result);
+                        }
+                    });
+                } else {
+                    alert("FormData is not supported.");
+                }
+            });
+            $('#btnicon').click(function () {
+
+                // Checking whether FormData is available in browser
+                if (window.FormData !== undefined) {
+
+                    var fileUpload = $("#iconfile").get(0);
+                    var files = fileUpload.files;
+
+                    // Create FormData object
+                    var fileData = new FormData();
+
+                    // Looping over all files and add it to FormData object
+                    for (var i = 0; i < files.length; i++) {
+                        fileData.append(files[i].name, files[i]);
+                    }
+                    var brandname = document.getElementById("Brand_Name").value;
+                    alert(brandname);
+                    // Adding one more key to FormData object
+                    fileData.append('brandname', brandname);
+
+                    $.ajax({
+                        url: '/Home/UploadIcon',
+                        type: "POST",
+                        contentType: false, // Not to set any content header
+                        processData: false, // Not to process data
+                        data: fileData,
+                        success: function (result) {
+                            if (result.isSuccess) {
+                                alert("Successfully submitted ajax!");
+                            } else {
+                                alert(result.errorMsg);
+                            }
+                            $("#Iconurl").attr('src', '/Icon/' + brandname + '_Icon.png');
+
+                        }
+                    });
+                } else {
+                    alert("FormData is not supported.");
+                }
+            });
+            $('#btnsave').click(function() {
+                alert("hi");
+                var b = {
+                    BID: $('#BID').val(),
+                    VID: $('#VID').val(),
+                    Brand_Name: document.getElementById("Brand_Name").value,
+                    Iconurl: $('#Iconurl').attr('src'),
+                    Imgurl: $('#Imgurl').attr('src'),
+                    Brand_Des: $('#Brand_Des').val()
+                };
+
+                console.log(b);
+                $.post("/Home/Brand", { b: b, IUDFlag:'@ViewBag.Flag'}, function (data) {
+
+                });
+
+
+            });
+        });
+    </script>
+
+}

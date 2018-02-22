@@ -1,0 +1,68 @@
+﻿@model AdminDashboard.Models.Vendor
+
+@{
+    ViewBag.Title = "Vendor";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<header class="page-header">
+    <div class="container-fluid">
+
+        <h2 class="no-margin-bottom">VENDORS</h2>
+    </div>
+</header>
+
+@using (Html.BeginForm("Vendor", "Home", new { IUDFlag = ViewBag.Flag }, FormMethod.Post))
+{
+
+    <section class="dashboard-counts no-padding-bottom">
+        <div class="container-fluid">
+            <div class="bg-white has-shadow">
+
+
+                <div class="row">
+
+
+                    <div class="col-sm-6 text-left">
+                        @Html.HiddenFor(model => model.VID, htmlAttributes: new { @class = "control-label col-md-2" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2">
+                        Vendor Name :
+                    </div>
+                    <div class="col-sm-6 text-left">
+                        @Html.EditorFor(model => model.Vendor_Name, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Vendor_Name, "", new { @class = "text-danger" })
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-sm-2">
+                        Vendor Description :
+                    </div>
+                    <div class="col-sm-6 text-left">
+                        @Html.EditorFor(model => model.Vendor_Des, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Vendor_Des, "", new { @class = "text-danger" })
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-offset-2 col-md-10 text-right">
+                        <input type="submit" id="btnsave" value="@ViewBag.Action" class="btn btn-default" />
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div>
+                @Html.ActionLink("Back to List", "Vendor")
+            </div>
+        </div>
+    </section>
+
+}
+
+

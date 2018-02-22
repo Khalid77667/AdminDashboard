@@ -1,0 +1,140 @@
+﻿@model IEnumerable<AdminDashboard.Models.SubCateRel>
+
+
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "SubCategory";
+}
+<head>
+    <style type="text/css">
+
+        #gridContent th {
+            text-align: center;
+            padding: auto;
+        }
+
+        #gridContent tr {
+            padding: auto;
+        }
+
+        th, td {
+            padding: 5px;
+        }
+
+        th {
+            background-color: rgb(248, 248, 248);
+        }
+
+        #gridT, #gridT tr {
+            border: 1px solid #0D857B;
+        }
+
+        #subT, #subT tr {
+            border: 1px solid #f3f3f3;
+        }
+
+        #subT {
+            margin: 0px 0px 0px 10px;
+            padding: 5px;
+            width: 95%;
+        }
+
+            #subT th {
+                font-size: 12px;
+            }
+
+        .hoverEff {
+            cursor: pointer;
+        }
+
+            .hoverEff:hover {
+                background-color: rgb(248, 242, 242);
+            }
+
+        .expand {
+            background-image: url(/Images/pm.png);
+            background-position-x: -22px;
+            background-repeat: no-repeat;
+        }
+
+        .collapse {
+            background-image: url(/Images/pm.png);
+            background-position-x: -2px;
+            background-repeat: no-repeat;
+        }
+    </style>
+</head>
+<header class="page-header">
+    <div class="container-fluid">
+
+        <h2 class="no-margin-bottom">SUB-CATEGORIES</h2>
+    </div>
+</header>
+<!-- Dashboard Counts Section-->
+<section class="dashboard-counts no-padding-bottom">
+    <div class="container-fluid">
+        <div class="row bg-white has-shadow">
+            <table id="tbl" class="table table-responsive table-bordered">
+                <tr>
+                    <th class="webgrid-header">
+                        CID
+                    </th>
+                    <th class="webgrid-header">
+                        Category Name
+                    </th>
+                    <th class="webgrid-header"></th>
+                </tr>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="webgrid-row-style">@item.CID</td>
+                        <td class="webgrid-row-style">@item.Category_Name</td>
+
+
+                        <td>
+                            <table>
+                                <tr>
+                                    <th>
+                                        CCID
+                                    </th>
+                                    <th>SCID</th>
+                                    <th>SubCategory_Name</th>
+                                    <th>SubCate_Des</th>
+                                    <th>Action</th>
+                                </tr>
+                                @foreach (var i in item.SCrel)
+                                {
+                                    <tr>
+                                        <td>@i.CCID</td>
+
+                                        <td>@i.SCID</td>
+
+                                        <td>@i.SubCategory_Name</td>
+
+                                        <td>@i.SubCate_Des</td>
+
+                                        <td>
+                                            @Html.ActionLink(" Edit", "SubCategoryDetail", new { IUDFlag = "U", CCID = @i.CCID }, new { @class = "fa fa-edit btn btn-outline-success" })
+
+                                            @Html.ActionLink(" Delete", "SubCategoryDetail", new { IUDFlag = "D", CCID = @i.CCID }, new { @class = "fa fa-trash btn btn-outline-danger" })
+
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </td>
+                    </tr>
+                }
+            </table>
+
+
+        </div>
+
+        <div class="card-body text-center">
+
+            @Html.ActionLink(" Add Category", "SubCategoryDetail", new { IUDFlag = "N", CCID = "0" }, new { @class = "fa fa-plus btn btn-outline-info" })
+
+        </div>
+    </div>
+</section>
